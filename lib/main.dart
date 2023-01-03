@@ -11,116 +11,46 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  int counter = 0;
-  List<int> numbers = [];
-
-  void addNum() {
-    setState(() {
-      numbers.length <= 10 ? numbers.add(numbers.length) : null;
-    });
-  }
-
-  void clearNums() {
-    setState(() {
-      numbers = [];
-    });
-  }
-
-  void onPlus() {
-    setState(() {
-      counter++;
-    });
-    /* 아래 코드도 같은 결과를 보인다. -> 가독성이 별로다.
-      counter++;
-      setState(() {}); // reload => build 메서드 재실행
-    */
-  }
-
-  void onMinus() {
-    setState(() {
-      counter--;
-    });
-  }
-
-  void init() {
-    setState(() {
-      counter = 0;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: TextTheme(
+          titleLarge: TextStyle(
+            color: Colors.red,
+          ),
+        ),
+      ),
       home: Scaffold(
         backgroundColor: const Color(0xFFF4EDDB),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Click Count',
-                style: TextStyle(
-                  fontSize: 30,
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '$counter',
-                    style: TextStyle(
-                      fontSize: 30,
-                    ),
-                  ),
-                  SizedBox(
-                    width: numbers.isNotEmpty ? 10 : 0,
-                  ),
-                  for (var n in numbers) Text('$n, '),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    iconSize: 40,
-                    onPressed: onPlus,
-                    icon: Icon(
-                      Icons.add_circle,
-                    ),
-                  ),
-                  IconButton(
-                    iconSize: 40,
-                    onPressed: onMinus,
-                    icon: Icon(
-                      Icons.remove_circle,
-                    ),
-                  ),
-                  IconButton(
-                    iconSize: 40,
-                    onPressed: init,
-                    icon: Icon(
-                      Icons.settings_backup_restore,
-                    ),
-                  ),
-                  IconButton(
-                    iconSize: 40,
-                    onPressed: addNum,
-                    icon: Icon(
-                      Icons.playlist_add,
-                    ),
-                  ),
-                  IconButton(
-                    iconSize: 40,
-                    onPressed: clearNums,
-                    icon: Icon(
-                      Icons.playlist_remove,
-                    ),
-                  ),
-                ],
-              ),
+            children: const [
+              MyLargeTitle(),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MyLargeTitle extends StatelessWidget {
+  const MyLargeTitle({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      'My Large Title',
+      style: TextStyle(
+        fontSize: 30,
+        color: Theme.of(context)
+            .textTheme
+            .titleLarge
+            ?.color, // 컨텍스트로부터 최상위 부모 위젯에 선언된 테마의 특정(큰타이틀 색상) 값 참조.
       ),
     );
   }
