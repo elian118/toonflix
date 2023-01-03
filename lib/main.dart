@@ -11,14 +11,40 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 10,
-          title: Text('Hello Flutter!'),
-        ),
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+        backgroundColor: Color(0xFF181818), // 16진수 색상 설정
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 10), // 수평 오프셋 10 지정
+          child: Column(
+            children: [
+              SizedBox(height: 80),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                          'Hey, Elian',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800,
+                          )
+                      ),
+                      Text(
+                        'Welcome Back!',
+                        style: TextStyle(
+                          color: Colors.white.withOpacity(0.8),
+                          fontSize: 18,
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              )
+            ],
+          ),
+        )
       ),
     ); // 디자인 시스템 선택: MaterialApp -> android, CupertinoApp -> iOS. 플러터는 같은 구글에서 만든 MaterialApp 호환도가 더 높고 안정적이다.
   }
