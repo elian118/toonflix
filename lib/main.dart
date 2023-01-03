@@ -12,14 +12,27 @@ class App extends StatefulWidget {
 
 class _AppState extends State<App> {
   int counter = 0;
+  List<int> numbers = [];
+
+  void addNum() {
+    setState(() {
+      numbers.length <= 10 ? numbers.add(numbers.length) : null;
+    });
+  }
+
+  void clearNums() {
+    setState(() {
+      numbers = [];
+    });
+  }
 
   void onPlus() {
     setState(() {
       counter++;
     });
-    /* 아래 코드도 같은 결과를 보인다.
+    /* 아래 코드도 같은 결과를 보인다. -> 가독성이 별로다.
       counter++;
-      setState(() {}); // reload
+      setState(() {}); // reload => build 메서드 재실행
     */
   }
 
@@ -50,11 +63,20 @@ class _AppState extends State<App> {
                   fontSize: 30,
                 ),
               ),
-              Text(
-                '$counter',
-                style: TextStyle(
-                  fontSize: 30,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    '$counter',
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
+                  ),
+                  SizedBox(
+                    width: numbers.isNotEmpty ? 10 : 0,
+                  ),
+                  for (var n in numbers) Text('$n, '),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -78,6 +100,20 @@ class _AppState extends State<App> {
                     onPressed: init,
                     icon: Icon(
                       Icons.settings_backup_restore,
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 40,
+                    onPressed: addNum,
+                    icon: Icon(
+                      Icons.playlist_add,
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 40,
+                    onPressed: clearNums,
+                    icon: Icon(
+                      Icons.playlist_remove,
                     ),
                   ),
                 ],
