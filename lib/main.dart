@@ -13,7 +13,9 @@ class App extends StatelessWidget {
       home: Scaffold(
         backgroundColor: Color(0xFF181818), // 16진수 색상 설정
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10), // 수평 오프셋 10 지정
+          padding: EdgeInsets.symmetric(
+              horizontal: 20
+          ), // 수평 오프셋 20 지정
           child: Column(
             children: [
               SizedBox(height: 80),
@@ -34,7 +36,7 @@ class App extends StatelessWidget {
                       Text(
                         'Welcome Back!',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.8),
+                          color: Color.fromRGBO(255, 255, 255, 0.8), // RGB색상 설정
                           fontSize: 18,
                         ),
                       ),
