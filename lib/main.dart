@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toonflix/widgets/button.dart';
+import 'package:toonflix/widgets/currency.dart';
 
 void main() {
   runApp(App());
@@ -11,8 +12,10 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          backgroundColor: const Color(0xFF181818), // 16진수 색상 설정
-          body: Padding(
+        backgroundColor: const Color(0xFF181818), // 16진수 색상 설정
+        body: SingleChildScrollView(
+          // 바디 스크롤 허용
+          child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20), // 수평 오프셋 20 지정
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +46,7 @@ class App extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(
-                  height: 100,
+                  height: 70,
                 ),
                 Text(
                   'Total Balance',
@@ -58,13 +61,13 @@ class App extends StatelessWidget {
                 const Text(
                   '\$5 194 382',
                   style: TextStyle(
-                    fontSize: 42,
+                    fontSize: 32,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
                 ),
                 const SizedBox(
-                  height: 30,
+                  height: 15,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -82,7 +85,7 @@ class App extends StatelessWidget {
                   ],
                 ),
                 SizedBox(
-                  height: 80,
+                  height: 40,
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -108,73 +111,38 @@ class App extends StatelessWidget {
                 SizedBox(
                   height: 20,
                 ),
-                Container(
-                  clipBehavior:
-                      Clip.hardEdge, // 컨테이너 영역에서 overflow 된 요소 후속처리 옵션 설정 =>
-                  decoration: BoxDecoration(
-                    color: Color(0xFF1F2133),
-                    borderRadius: BorderRadius.circular(25),
+                CurrencyCard(
+                  name: 'Euro',
+                  code: 'EUR',
+                  amount: '6 428',
+                  icon: Icons.euro_rounded,
+                  isInverted: false,
+                ),
+                Transform.translate(
+                  offset: Offset(0, -30),
+                  child: CurrencyCard(
+                    name: 'Bitcoin',
+                    code: 'BTC',
+                    amount: '9 785',
+                    icon: Icons.currency_bitcoin,
+                    isInverted: true,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(30),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Euro',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 32,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  '6 428',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Text(
-                                  'EUR',
-                                  style: TextStyle(
-                                    color: Colors.white.withOpacity(0.8),
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Transform.scale(
-                          scale: 2.2, // 크기 확대
-                          child: Transform.translate(
-                            offset: Offset(-5, 12), // 위치 이동(x, y)
-                            child: const Icon(
-                              Icons.euro_rounded,
-                              color: Colors.white,
-                              size: 88,
-                            ),
-                          ),
-                        ), // 다른 요소들은 건들지 않고, 지정된 요소만 변형
-                      ],
-                    ),
+                ),
+                Transform.translate(
+                  offset: Offset(0, -60),
+                  child: CurrencyCard(
+                    name: 'Dollar',
+                    code: 'USD',
+                    amount: '428',
+                    icon: Icons.monetization_on_outlined,
+                    isInverted: false,
                   ),
                 ),
               ],
             ),
-          )),
+          ),
+        ),
+      ),
     ); // 디자인 시스템 선택: MaterialApp -> android, CupertinoApp -> iOS. 플러터는 같은 구글에서 만든 MaterialApp 호환도가 더 높고 안정적이다.
   }
 }
