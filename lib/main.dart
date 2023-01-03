@@ -10,21 +10,21 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: Color(0xFF181818), // 16진수 색상 설정
+        backgroundColor: const Color(0xFF181818), // 16진수 색상 설정
         body: Padding(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
               horizontal: 20
           ), // 수평 오프셋 20 지정
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: 80),
+              const SizedBox(height: 80),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
+                    children: const [
                       Text(
                           'Hey, Elian',
                           style: TextStyle(
@@ -44,7 +44,7 @@ class App extends StatelessWidget {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 120,
               ),
               Text(
@@ -54,10 +54,10 @@ class App extends StatelessWidget {
                   color: Colors.white.withOpacity(0.8),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 10,
               ),
-              Text(
+              const Text(
                 '\$5 194 382',
                 style: TextStyle(
                   fontSize: 42,
@@ -65,7 +65,7 @@ class App extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Row(
@@ -73,12 +73,12 @@ class App extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: Color(0xFFF2B33A),
+                      color: const Color(0xFFF2B33A),
                       borderRadius: BorderRadius.circular(45),
                     ),
-                    child: Padding(
+                    child: const Padding(
                       padding: EdgeInsets.symmetric(
-                        vertical: 20,
+                        vertical: 15,
                         horizontal: 45,
                       ),
                       child: Text(
@@ -95,8 +95,8 @@ class App extends StatelessWidget {
                       borderRadius: BorderRadius.circular(45),
                     ),
                     child: Padding(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 20,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 15,
                         horizontal: 45,
                       ),
                       child: Text(
