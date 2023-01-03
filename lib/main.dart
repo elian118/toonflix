@@ -13,8 +13,26 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   int counter = 0;
 
-  void onClicked() {
-    counter++;
+  void onPlus() {
+    setState(() {
+      counter++;
+    });
+    /* 아래 코드도 같은 결과를 보인다.
+      counter++;
+      setState(() {}); // reload
+    */
+  }
+
+  void onMinus() {
+    setState(() {
+      counter--;
+    });
+  }
+
+  void init() {
+    setState(() {
+      counter = 0;
+    });
   }
 
   @override
@@ -38,13 +56,32 @@ class _AppState extends State<App> {
                   fontSize: 30,
                 ),
               ),
-              IconButton(
-                iconSize: 40,
-                onPressed: onClicked,
-                icon: Icon(
-                  Icons.add_box_rounded,
-                ),
-              )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    iconSize: 40,
+                    onPressed: onPlus,
+                    icon: Icon(
+                      Icons.add_circle,
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 40,
+                    onPressed: onMinus,
+                    icon: Icon(
+                      Icons.remove_circle,
+                    ),
+                  ),
+                  IconButton(
+                    iconSize: 40,
+                    onPressed: init,
+                    icon: Icon(
+                      Icons.settings_backup_restore,
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
