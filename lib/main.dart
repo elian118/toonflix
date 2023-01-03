@@ -109,54 +109,69 @@ class App extends StatelessWidget {
                   height: 20,
                 ),
                 Container(
-                    decoration: BoxDecoration(
-                      color: Color(0xFF1F2133),
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(30),
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Euro',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 32,
-                                  fontWeight: FontWeight.w600,
+                  clipBehavior:
+                      Clip.hardEdge, // 컨테이너 영역에서 overflow 된 요소 후속처리 옵션 설정 =>
+                  decoration: BoxDecoration(
+                    color: Color(0xFF1F2133),
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(30),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Euro',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 32,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  '6 428',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    '6 428',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                    ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'EUR',
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.8),
+                                    fontSize: 20,
                                   ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'EUR',
-                                    style: TextStyle(
-                                      color: Colors.white.withOpacity(0.8),
-                                      fontSize: 20,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Transform.scale(
+                          scale: 2.2, // 크기 확대
+                          child: Transform.translate(
+                            offset: Offset(-5, 12), // 위치 이동(x, y)
+                            child: const Icon(
+                              Icons.euro_rounded,
+                              color: Colors.white,
+                              size: 88,
+                            ),
                           ),
-                        ],
-                      ),
-                    ))
+                        ), // 다른 요소들은 건들지 않고, 지정된 요소만 변형
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           )),
