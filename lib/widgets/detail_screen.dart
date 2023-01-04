@@ -32,12 +32,12 @@ class DetailScreen extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(
-            height: 50,
+            height: 70,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ThumbView(thumb: thumb),
+              ThumbView(thumb: thumb, id: id),
             ],
           ),
         ],

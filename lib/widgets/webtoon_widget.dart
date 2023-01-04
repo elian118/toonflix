@@ -26,12 +26,12 @@ class Webtoon extends StatelessWidget {
         );
         Navigator.push(
           context,
-          pageRouteWithAnimation.slideTopToBottom(),
+          pageRouteWithAnimation.slideBottomToTop(),
         );
       },
       child: Column(
         children: [
-          ThumbView(thumb: thumb),
+          ThumbView(thumb: thumb, id: id),
           SizedBox(
             height: 10,
           ),
