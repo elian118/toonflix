@@ -30,22 +30,13 @@ class HomeScreen extends StatelessWidget {
         future: webtoons,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            // ListView: 배열 데이터를 목록 형태로 빌드하는 위젯. 스크롤 기능이 화면에 자동 부여한다.
-            // ListView.builder: 페이징 등 최적화가 가능한 옵션 다수 제공
-            // ListView.separated: builder 메서드와 인수가 거의 동일하고, separatorBuilder 를 추가 필수 인수로 요구한다.
-            return ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: snapshot.data!.length,
-              // itemBuilder: 사용자가 현재 보려는 아이템만 실시간 빌드하는 옵션
-              itemBuilder: (context, index) {
-                print('built index: $index'); // 실시간 빌드 여부 확인
-                var webtoon = snapshot.data![index];
-                return Text(webtoon.title);
-              },
-              // separatorBuilder: 요소 구분자(스타일 래퍼) 빌더
-              separatorBuilder: (context, index) => SizedBox(
-                width: 20, // 요소 간 간격 20 부여 => 처음과 끝은 자동 생략 처리
-              ),
+            return Column(
+              children: [
+                SizedBox(
+                  height: 50,
+                ),
+                Expanded(child: makeList(snapshot)),
+              ],
             );
           }
           return Center(
@@ -55,4 +46,56 @@ class HomeScreen extends StatelessWidget {
       ),
     );
   }
+
+  ListView makeList(AsyncSnapshot<List<WebtoonModel>> snapshot) {
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: snapshot.data!.length,
+      padding: EdgeInsets.symmetric(
+        vertical: 20,
+        horizontal: 20,
+      ),
+      itemBuilder: (context, index) {
+        var webtoon = snapshot.data![index];
+        return Column(
+          children: [
+            Container(
+              width: 250,
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 15,
+                    offset: Offset(10, 10),
+                    color: Colors.black.withOpacity(0.5),
+                  )
+                ],
+              ),
+              child: Image.network(webtoon.thumb),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Text(
+              webtoon.title,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        );
+      },
+      separatorBuilder: (context, index) => SizedBox(
+        width: 40,
+      ),
+    );
+  }
 }
+
+/*
+  ListView: 배열 데이터를 목록 형태로 빌드하는 위젯. 스크롤 기능이 화면에 자동 부여한다.
+  ListView.builder: 페이징 등 최적화가 가능한 옵션 다수 제공
+  ListView.separated: builder 메서드와 거의 동일하나, 필수인수로 separatorBuilder 추가 요구
+*/
