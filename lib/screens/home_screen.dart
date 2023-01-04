@@ -11,12 +11,13 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int totalSecond = 1500;
+  bool isRunning = false;
   late Timer timer;
 
   // 콜백: 오류 방지를 위해, 실제로는 사용하지도 않을 Timer 인수 추가
   void onTick(Timer timer) {
     setState(() {
-      totalSecond--;
+      totalSecond = isRunning ? totalSecond - 1 : totalSecond;
     });
   }
 
@@ -26,6 +27,16 @@ class _HomeScreenState extends State<HomeScreen> {
       Duration(seconds: 1),
       onTick, // 두 번째 인자로 들어갈 콜백은 Timer 인수를 꼭 받아야 하지만, 여기서는 넘길 이유가 없다.
     );
+    setState(() {
+      isRunning = true;
+    });
+  }
+
+  void onPausePressed() {
+    timer.cancel(); // 자바스크립트의 clearInterval()과 같다.
+    setState(() {
+      isRunning = false;
+    });
   }
 
   @override
@@ -54,8 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
               child: IconButton(
                 color: Theme.of(context).cardColor,
                 iconSize: 120,
-                icon: Icon(Icons.play_circle_outline),
-                onPressed: onStartPress,
+                icon: isRunning
+                    ? Icon(Icons.play_circle_outline)
+                    : Icon(Icons.pause_circle_filled_outlined),
+                onPressed: isRunning ? onPausePressed : onStartPress,
               ),
             ),
           ),
