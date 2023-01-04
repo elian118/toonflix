@@ -5,7 +5,7 @@ class PageRouteWithAnimation {
 
   PageRouteWithAnimation(this.page);
 
-  makeSlideAnimation({required double dx, required double dy}) =>
+  Route makeSlideAnimation({required double dx, required double dy}) =>
       PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) => page,
         fullscreenDialog: true,
