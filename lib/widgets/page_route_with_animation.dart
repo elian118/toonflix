@@ -14,8 +14,8 @@ class PageRouteWithAnimation {
         secondaryAnimation,
         child,
       ) {
-        var begin = Offset(1.0,
-            0.0); // Offset 기준은 화면 왼쪽 위 끝을 (0, 0)으로 하고, y 좌표는 아래로 갈수록 값이 증가한다.
+        // Offset 기준은 화면 왼쪽 위 끝을 (0, 0)으로 하고, y 좌표는 아래로 갈수록 값이 증가한다.
+        var begin = Offset(1.0, 0.0);
         var end = Offset.zero;
         var curve = Curves.ease;
         var tween = Tween(
