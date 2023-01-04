@@ -3,33 +3,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:toonflix/models/webtoon.dart';
 import 'package:toonflix/services/api_service.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class HomeScreen extends StatelessWidget {
+  HomeScreen({Key? key}) : super(key: key);
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  List<WebtoonModel> webtoons = [];
-  bool isLoading = true;
-
-  void waitForWebToons() async {
-    webtoons = await ApiService.getTodaysToons();
-    isLoading = false;
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    waitForWebToons();
-  }
+  Future<List<WebtoonModel>> webtoons = ApiService.getTodaysToons();
 
   @override
   Widget build(BuildContext context) {
-    print('isLoading: $isLoading');
-    print('webtoons.length: ${webtoons.length}');
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -44,6 +24,18 @@ class _HomeScreenState extends State<HomeScreen> {
             fontWeight: FontWeight.w600,
           ),
         ),
+      ),
+      body: FutureBuilder(
+        // FutureBuilder: 비동기 함수 실행 결과를 추적하고 실시간 반영해 빌드(랜더)하는 위젯 => 따라서, 플러터는 리액트처럼 state 애용 X
+        future: webtoons,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            print('There is Data!');
+            return Text('There is Data!');
+          }
+          print('Loading...');
+          return Text('Loading...');
+        },
       ),
     );
   }
