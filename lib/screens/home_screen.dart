@@ -10,22 +10,37 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int totalSecond = 1500;
+  static const twentyFiveMinutes = 1500;
+  int totalSecond = twentyFiveMinutes;
+  int totalPomodoro = 0;
   bool isRunning = false;
   late Timer timer;
 
-  // 콜백: 오류 방지를 위해, 실제로는 사용하지도 않을 Timer 인수 추가
-  void onTick(Timer timer) {
+  void reset() {
+    setState(() {
+      totalPomodoro++;
+      totalSecond = twentyFiveMinutes;
+      isRunning = false;
+    });
+    timer.cancel();
+  }
+
+  void playCount() {
     setState(() {
       totalSecond = isRunning ? totalSecond - 1 : totalSecond;
     });
+  }
+
+  // 콜백: 오류 방지를 위해, 실제로는 사용하지도 않을 Timer 인수 추가
+  void onTick(Timer timer) {
+    totalSecond == 0 ? reset() : playCount();
   }
 
   void onStartPress() {
     // 아래 Timer 위젯은 플러터에서 기본 제공하며, 자바스크립트의 setInterval()과 같다.
     timer = Timer.periodic(
       Duration(seconds: 1),
-      onTick, // 두 번째 인자로 들어갈 콜백은 Timer 인수를 꼭 받아야 하지만, 여기서는 넘길 이유가 없다.
+      onTick, // 두 번째 인자로 들어갈 콜백은 Timer 인자를 꼭 받아야 하지만, 여기서는 넘길 이유가 없다.
     );
     setState(() {
       isRunning = true;
@@ -39,6 +54,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  String format(int seconds) {
+    var duration = Duration(seconds: seconds);
+    // return duration.toString().split('.')[0].replaceAll('0:', '');
+    return duration.toString().split('.').first.substring(2, 7);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               alignment: Alignment.bottomCenter,
               child: Text(
-                '$totalSecond',
+                format(totalSecond),
                 style: TextStyle(
                   fontSize: 89,
                   fontWeight: FontWeight.w600,
@@ -66,8 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Theme.of(context).cardColor,
                 iconSize: 120,
                 icon: isRunning
-                    ? Icon(Icons.play_circle_outline)
-                    : Icon(Icons.pause_circle_filled_outlined),
+                    ? Icon(Icons.pause_circle_filled_outlined)
+                    : Icon(Icons.play_circle_outline),
                 onPressed: isRunning ? onPausePressed : onStartPress,
               ),
             ),
@@ -97,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                         Text(
-                          '0',
+                          '$totalPomodoro',
                           style: TextStyle(
                             fontSize: 58,
                             fontWeight: FontWeight.w600,
