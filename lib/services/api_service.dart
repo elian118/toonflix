@@ -36,16 +36,16 @@ class ApiService {
     throw Error();
   }
 
-  static Future<List<WebtoonEpisodeMode>> getLatestEpisodesById(
+  static Future<List<WebtoonEpisodeModel>> getLatestEpisodesById(
       String id) async {
-    List<WebtoonEpisodeMode> episodesInstances = [];
+    List<WebtoonEpisodeModel> episodesInstances = [];
     final url = Uri.parse('$baseUrl/$id/episodes');
     final res = await http.get(url);
 
     if (res.statusCode == 200) {
       final List<dynamic> episodes = jsonDecode(res.body);
       for (var episode in episodes) {
-        episodesInstances.add(WebtoonEpisodeMode.fromJson(episode));
+        episodesInstances.add(WebtoonEpisodeModel.fromJson(episode));
       }
       return episodesInstances;
     }
