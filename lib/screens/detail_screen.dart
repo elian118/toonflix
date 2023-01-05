@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:toonflix/models/webtoon_episode_model.dart';
 import 'package:toonflix/services/api_service.dart';
+import 'package:toonflix/widgets/decript_widget.dart';
+import 'package:toonflix/widgets/episodes_widget.dart';
 import 'package:toonflix/widgets/thumb_widget.dart';
 
 import '../models/webtoon_detail_model.dart';
@@ -54,50 +56,28 @@ class _DetailScreenState extends State<DetailScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          SizedBox(
-            height: 70,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 70),
+          child: Column(
             children: [
-              ThumbView(thumb: widget.thumb, id: widget.id),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ThumbView(thumb: widget.thumb, id: widget.id),
+                ],
+              ),
+              SizedBox(
+                height: 25,
+              ),
+              Description(webtoon: webtoon),
+              SizedBox(
+                height: 25,
+              ),
+              Episodes(episodes: episodes, webtoonId: widget.id)
             ],
           ),
-          SizedBox(
-            height: 25,
-          ),
-          FutureBuilder(
-            future: webtoon,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 50),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        snapshot.data!.about,
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      Text(
-                        '${snapshot.data!.genre} / ${snapshot.data!.age}',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                    ],
-                  ),
-                );
-              }
-              return Text('...');
-            },
-          )
-        ],
+        ),
       ),
     );
   }
