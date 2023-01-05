@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:toonflix/widgets/detail_screen.dart';
+import 'package:toonflix/screens/detail_screen.dart';
 import 'package:toonflix/widgets/page_route_with_animation.dart';
 import 'package:toonflix/widgets/thumb_widget.dart';
 
