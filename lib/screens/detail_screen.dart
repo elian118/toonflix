@@ -68,9 +68,6 @@ class _DetailScreenState extends State<DetailScreen> {
     initPrefs();
   }
 
-  // @override
-  // void d
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
