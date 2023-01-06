@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toonflix/models/webtoon_episode_model.dart';
 import 'package:toonflix/services/api_service.dart';
 import 'package:toonflix/widgets/decript_widget.dart';
@@ -31,13 +32,44 @@ class _DetailScreenState extends State<DetailScreen> {
   late Future<WebtoonDetailModel> webtoon;
   late Future<List<WebtoonEpisodeModel>> episodes;
 
+  // https://pub.dev/packages/shared_preferences
+  // Shared preferences plugin => 플랫폼 고유의 영속적인 간편 저장소 제공
+  // 비동기적으로 저장된 값을 저장/수정/조회할 수 있어, 마치 또 다른 서버에 접속하는 느낌을 준다.
+  // 단, 이 저장소는 영구 지속성을 보증하지 않으므로, 중요 데이터 보관에 부적합하다.
+  late SharedPreferences prefs;
+  bool isLiked = false;
+
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final likedToons =
+        prefs.getStringList('likedToons'); // getStringList() 기본 초기값 null
+
+    likedToons != null
+        ? setState(() => isLiked = likedToons.contains(widget.id))
+        : await prefs.setStringList('likedToons', []); // 초기화
+  }
+
+  void onHeartTab() async {
+    final likedToons = prefs.getStringList('likedToons'); // 저장소 복사본
+
+    if (likedToons != null) {
+      isLiked ? likedToons.remove(widget.id) : likedToons.add(widget.id);
+      await prefs.setStringList('likedToons', likedToons);
+      setState(() => isLiked = !isLiked);
+    }
+  }
+
   // 초기화
   @override
   void initState() {
     super.initState();
     webtoon = ApiService.getToonById(widget.id);
     episodes = ApiService.getLatestEpisodesById(widget.id);
+    initPrefs();
   }
+
+  // @override
+  // void d
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +80,14 @@ class _DetailScreenState extends State<DetailScreen> {
         centerTitle: true,
         backgroundColor: Colors.white,
         foregroundColor: Colors.green,
+        actions: [
+          IconButton(
+            onPressed: onHeartTab,
+            icon: isLiked
+                ? Icon(Icons.favorite)
+                : Icon(Icons.favorite_outline_outlined),
+          ),
+        ],
         title: Text(
           widget.title, // 특정 state 가 보관된 인스턴스에 접근해 값을 가져온다.
           style: GoogleFonts.nanumGothic(
