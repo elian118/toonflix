@@ -6,4 +6,9 @@ class WebtoonEpisodeModel {
         title = json['title'],
         rating = json['rating'],
         date = json['date'];
+
+  @override
+  String toString() {
+    return 'WebtoonEpisodeModel{id: $id, title: $title, rating: $rating, date: $date}';
+  }
 }

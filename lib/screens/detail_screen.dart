@@ -1,70 +1,62 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:toonflix/models/webtoon_episode_model.dart';
-import 'package:toonflix/services/api_service.dart';
-import 'package:toonflix/widgets/decript_widget.dart';
-import 'package:toonflix/widgets/episodes_widget.dart';
-import 'package:toonflix/widgets/thumb_widget.dart';
+import 'package:toonflix/models/webtoon_detail_model.dart';
+import 'package:toonflix/models/webtoon_model.dart';
+import 'package:toonflix/services/api_services.dart';
+import 'package:toonflix/widgets/episode.dart';
 
-import '../models/webtoon_detail_model.dart';
+import '../models/webtoon_episode_model.dart';
 
-// Api 호출 시 특정 파라미터를 입력해야 할 경우,
-// StatefulWidget 의 멤버상수를 state 로 가져와 사용해야 한다.
 class DetailScreen extends StatefulWidget {
-  final String title, thumb, id;
+  final WebtoonModel webtoon;
 
   const DetailScreen({
     super.key,
-    required this.title,
-    required this.thumb,
-    required this.id,
+    required this.webtoon,
   });
 
-  // 화면에서는 지정된 위치에 사용자가 확인할 state 를 보유한
-  // 여러 State 상속 클래스가 계속해서 생성 및 교체되는 식으로 빌드된다.
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
-// 제네릭 State 를 상속하면 해당 클래스 멤버번수가 state 화되고, widget 으로 접근 가능하다.(this 와 구분)
 class _DetailScreenState extends State<DetailScreen> {
-  late Future<WebtoonDetailModel> webtoon;
+  late Future<WebtoonDetailModel> detail;
   late Future<List<WebtoonEpisodeModel>> episodes;
-
-  // https://pub.dev/packages/shared_preferences
-  // Shared preferences plugin => 플랫폼 고유의 영속적인 간편 저장소 제공
-  // 비동기적으로 저장된 값을 저장/수정/조회할 수 있어, 마치 또 다른 서버에 접속하는 느낌을 준다.
-  // 단, 이 저장소는 영구 지속성을 보증하지 않으므로, 중요 데이터 보관에 부적합하다.
   late SharedPreferences prefs;
   bool isLiked = false;
 
   Future initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    final likedToons =
-        prefs.getStringList('likedToons'); // getStringList() 기본 초기값 null
-
-    likedToons != null
-        ? setState(() => isLiked = likedToons.contains(widget.id))
-        : await prefs.setStringList('likedToons', []); // 초기화
-  }
-
-  void onHeartTab() async {
-    final likedToons = prefs.getStringList('likedToons'); // 저장소 복사본
-
+    final likedToons = prefs.getStringList('likedToons');
     if (likedToons != null) {
-      isLiked ? likedToons.remove(widget.id) : likedToons.add(widget.id);
-      await prefs.setStringList('likedToons', likedToons);
-      setState(() => isLiked = !isLiked);
+      if (likedToons.contains(widget.webtoon.id) == true) {
+        setState(() {
+          isLiked = true;
+        });
+      }
+    } else {
+      await prefs.setStringList('likedToons', []);
     }
   }
 
-  // 초기화
+  void onHeartTab() async {
+    final likedToons = prefs.getStringList('likedToons');
+    if (likedToons != null) {
+      isLiked
+          ? likedToons.remove(widget.webtoon.id)
+          : likedToons.add(widget.webtoon.id);
+      await prefs.setStringList('likedToons', likedToons);
+      setState(() {
+        isLiked = !isLiked;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    webtoon = ApiService.getToonById(widget.id);
-    episodes = ApiService.getLatestEpisodesById(widget.id);
+    detail = ApiService.getToonById(widget.webtoon.id);
+    episodes = ApiService.getLatestEpisodesById(widget.webtoon.id); // 최대 10개
     initPrefs();
   }
 
@@ -74,44 +66,98 @@ class _DetailScreenState extends State<DetailScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 2,
-        centerTitle: true,
         backgroundColor: Colors.white,
         foregroundColor: Colors.green,
         actions: [
           IconButton(
             onPressed: onHeartTab,
             icon: isLiked
-                ? Icon(Icons.favorite)
-                : Icon(Icons.favorite_outline_outlined),
-          ),
+                ? const Icon(Icons.favorite_rounded)
+                : const Icon(Icons.favorite_outline_outlined),
+          )
         ],
         title: Text(
-          widget.title, // 특정 state 가 보관된 인스턴스에 접근해 값을 가져온다.
-          style: GoogleFonts.nanumGothic(
+          widget.webtoon.title,
+          style: const TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.w600,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 70),
+          padding: const EdgeInsets.all(50),
           child: Column(
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ThumbView(thumb: widget.thumb, id: widget.id),
+                  Hero(
+                    tag: widget.webtoon.id,
+                    child: Container(
+                      width: 250,
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 15,
+                            offset: const Offset(10, 10),
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+                      child: Image.network(
+                        widget.webtoon.thumb,
+                        headers: const {
+                          "User-Agent":
+                              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, lilke Gecko)"
+                        },
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              SizedBox(
-                height: 25,
+              const SizedBox(height: 20),
+              FutureBuilder(
+                future: detail,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          snapshot.data!.about,
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(height: 15),
+                        Text(
+                          '${snapshot.data!.genre} | ${snapshot.data!.age}',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    );
+                  }
+                  return const Text('...');
+                },
               ),
-              Description(webtoon: webtoon),
-              SizedBox(
-                height: 25,
+              const SizedBox(height: 25),
+              FutureBuilder(
+                future: episodes,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      children: [
+                        ...snapshot.data!.map(
+                          (episode) => Episode(
+                              webtoonId: widget.webtoon.id, episode: episode),
+                        ),
+                      ],
+                    );
+                  }
+                  return const LinearProgressIndicator();
+                },
               ),
-              Episodes(episodes: episodes, webtoonId: widget.id)
             ],
           ),
         ),

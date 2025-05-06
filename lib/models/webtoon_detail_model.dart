@@ -6,4 +6,9 @@ class WebtoonDetailModel {
         about = json['about'],
         genre = json['genre'],
         age = json['age'];
+
+  @override
+  String toString() {
+    return 'WebtoonDetailModel{title: $title, about: $about, genre: $genre, age: $age}';
+  }
 }
