@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="toonflix2"
+        android:label="toonflix"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

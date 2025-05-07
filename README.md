@@ -1,4 +1,4 @@
-# toonflix2
+# toonflix
 
 A new Flutter project.
 
